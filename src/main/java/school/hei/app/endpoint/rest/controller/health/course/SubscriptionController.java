@@ -37,21 +37,29 @@ public class SubscriptionController {
 
       User user =
           userRepository
-              .findById((userId))
+              .findById(userId)
               .orElseThrow(
                   () -> {
                     log.error("User not found: {}", userId);
                     return new IllegalArgumentException("User not found: " + userId);
                   });
 
+      log.info(
+          "User found: {} (name: {}, email: {})", user.getId(), user.getName(), user.getEmail());
       Course course =
           courseRepository
-              .findById((courseId))
+              .findById(courseId)
               .orElseThrow(
                   () -> {
                     log.error("Course not found: {}", courseId);
                     return new IllegalArgumentException("Course not found: " + courseId);
                   });
+
+      log.info(
+          "Course found: {} (title: {}, price: {})",
+          course.getId(),
+          course.getTitle(),
+          course.getPrice());
 
       Subscription subscription =
           Subscription.builder().user(user).course(course).subscribedAt(Instant.now()).build();
@@ -64,8 +72,13 @@ public class SubscriptionController {
               .userId(userId)
               .courseId(courseId)
               .userEmail(user.getEmail())
+              .userName(user.getName())
               .courseTitle(course.getTitle())
+              .courseDescription(course.getDescription())
+              .coursePrice(course.getPrice())
               .build();
+
+      log.info("Event created: {}", event);
 
       eventProducer.accept(List.of(event));
       log.info("Event sent successfully");
