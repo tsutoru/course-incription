@@ -151,6 +151,14 @@ dependencies {
     testImplementation 'org.testcontainers:testcontainers-junit-jupiter:2.0.2'
     testImplementation 'org.junit-pioneer:junit-pioneer:2.2.0'
 
+    implementation 'com.itextpdf:itextpdf:5.5.13.3'
+
+    implementation platform('software.amazon.awssdk:bom:2.21.40')
+    implementation 'software.amazon.awssdk:s3'
+    implementation 'software.amazon.awssdk:regions'
+    implementation 'software.amazon.awssdk:aws-core'
+
+    implementation 'software.amazon.awssdk:sts'
 
 
 }
