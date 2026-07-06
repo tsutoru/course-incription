@@ -148,6 +148,12 @@ dependencies {
     testImplementation 'org.testcontainers:testcontainers-junit-jupiter:2.0.2'
     testImplementation 'org.junit-pioneer:junit-pioneer:2.2.0'
 
+    implementation 'com.itextpdf:itextpdf:5.5.13.3'
+
+    // ☁️ AWS S3 SDK v2
+    implementation 'software.amazon.awssdk:s3:2.21.40'
+    implementation 'software.amazon.awssdk:aws-core:2.21.40'
+    implementation 'software.amazon.awssdk:regions:2.21.40'
 
 
 }

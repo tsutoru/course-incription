@@ -22,6 +22,7 @@ public class SubscriptionRequested extends PojaEvent {
   private String courseTitle;
   private String courseDescription;
   private Double coursePrice;
+  private String pdfUrl;
 
   @Override
   public Duration maxConsumerDuration() {
