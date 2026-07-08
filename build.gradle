@@ -150,12 +150,9 @@ dependencies {
 
     implementation 'com.itextpdf:itextpdf:5.5.13.3'
 
-    implementation platform('software.amazon.awssdk:bom:2.21.40')
-    implementation 'software.amazon.awssdk:s3'
-    implementation 'software.amazon.awssdk:regions'
-    implementation 'software.amazon.awssdk:aws-core'
-
-    implementation 'software.amazon.awssdk:sts'
+    implementation 'software.amazon.awssdk:s3:2.21.40'
+    implementation 'software.amazon.awssdk:regions:2.21.40'
+    implementation 'software.amazon.awssdk:aws-core:2.21.40'
 
     implementation 'org.springframework.boot:spring-boot-starter-mail'
 
