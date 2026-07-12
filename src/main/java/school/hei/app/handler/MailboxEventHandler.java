@@ -1,5 +1,6 @@
 package school.hei.app.handler;
 
+import static java.lang.Runtime.getRuntime;
 import static java.lang.System.getenv;
 import static java.lang.Thread.currentThread;
 import static school.hei.app.concurrency.ThreadRenamer.renameWorkerThread;
@@ -8,6 +9,7 @@ import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.SQSEvent;
 import com.amazonaws.services.lambda.runtime.events.SQSEvent.SQSMessage;
+import com.zaxxer.hikari.HikariDataSource;
 import java.util.List;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
@@ -42,17 +44,39 @@ public class MailboxEventHandler implements RequestHandler<SQSEvent, String> {
     log.info("SQS messages: {}", messages);
 
     var applicationContext = applicationContext();
+    getRuntime()
+        .addShutdownHook(
+            // in case, say, the execution timed out
+            // TODO: no, we have no control over when AWS shuts the JVM down
+            //   Best is to regularly check whether we are nearing end of allowedTime,
+            //   in which case we close resources before timing out.
+            //   Frontal functions might have the same issue also.
+            new Thread(() -> onHandled(applicationContext)));
+
     var eventConsumer = applicationContext.getBean(EventConsumer.class);
     var messageConverter = applicationContext.getBean(ConsumableEventTyper.class);
 
     eventConsumer.accept(messageConverter.apply(messages));
-    applicationContext.close();
+
+    onHandled(applicationContext);
     return "ok";
+  }
+
+  private void onHandled(ConfigurableApplicationContext applicationContext) {
+    try {
+      var hikariDatasource = applicationContext.getBean(HikariDataSource.class);
+      hikariDatasource.close();
+
+      applicationContext.close();
+    } catch (Exception ignored) {
+    }
   }
 
   private ConfigurableApplicationContext applicationContext(String... args) {
     SpringApplication application = new SpringApplication(PojaApplication.class);
-    application.setDefaultProperties(Map.of("server.port", SPRING_SERVER_PORT_FOR_RANDOM_VALUE));
+    application.setDefaultProperties(
+        Map.of(
+            "spring.flyway.enabled", "false", "server.port", SPRING_SERVER_PORT_FOR_RANDOM_VALUE));
     application.setAdditionalProfiles("worker");
     return application.run(args);
   }

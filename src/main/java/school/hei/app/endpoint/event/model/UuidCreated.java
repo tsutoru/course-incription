@@ -1,5 +1,6 @@
 package school.hei.app.endpoint.event.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.Duration;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,26 +8,22 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import school.hei.app.PojaGenerated;
 
+@PojaGenerated
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
 @Data
 @EqualsAndHashCode(callSuper = false)
 @ToString
-public class SubscriptionRequested extends PojaEvent {
-  private String userId;
-  private String courseId;
-  private String userEmail;
-  private String userName;
-  private String courseTitle;
-  private String courseDescription;
-  private Double coursePrice;
-  private String pdfUrl;
+public class UuidCreated extends PojaEvent {
+  @JsonProperty("uuid")
+  private String uuid;
 
   @Override
   public Duration maxConsumerDuration() {
-    return Duration.ofSeconds(45);
+    return Duration.ofSeconds(10);
   }
 
   @Override
