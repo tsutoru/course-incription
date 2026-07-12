@@ -15,15 +15,15 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = false)
 @ToString
 public class SendEmailRequested extends PojaEvent {
-    private String to;
+  private String to;
 
-    @Override
-    public Duration maxConsumerDuration() {
-        return Duration.ofSeconds(45);
-    }
+  @Override
+  public Duration maxConsumerDuration() {
+    return Duration.ofSeconds(45);
+  }
 
-    @Override
-    public Duration maxConsumerBackoffBetweenRetries() {
-        return Duration.ofSeconds(30);
-    }
+  @Override
+  public Duration maxConsumerBackoffBetweenRetries() {
+    return Duration.ofSeconds(30);
+  }
 }
