@@ -4,6 +4,7 @@ import java.time.Instant;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,6 +32,11 @@ public class SubscriptionController {
   @PostMapping("/courses/{courseId}/subscribe")
   public ResponseEntity<Void> subscribe(
       @PathVariable String courseId, @RequestParam String userId) {
+
+    if (subscriptionRepository.findByUserIdAndCourseId(userId, courseId).isPresent()) {
+      log.warn("Already subscribed - courseId: {}, userId: {}", courseId, userId);
+      return ResponseEntity.status(HttpStatus.CONFLICT).build();
+    }
 
     try {
       log.info("Subscription request - courseId: {}, userId: {}", courseId, userId);

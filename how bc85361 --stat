@@ -1,0 +1,9 @@
+[33mcommit 0121a8f91514c3c33b6793d5326e9766f0f229a2[m
+Merge: 6dcb93d bc85361
+Author: Arnel Raharinandrasana <167875243+Arnel-rah@users.noreply.github.com>
+Date:   Wed Jul 8 22:36:04 2026 +0300
+
+    fix: add missing iTextPDF and AWS S3 dependencies
+    
+    feat: add S3 with IAM role (no keys)
+
